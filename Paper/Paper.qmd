@@ -1,0 +1,26 @@
+---
+title: "My title"
+subtitle: "My subtitle if needed"
+author: Krishna Kumar
+thanks: "Code and data are available at: LINK."
+date: today
+date-format: long
+abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+# Introduction
+
+# Data
+
+-   Can add summary stats of the data for the reader to get a better idea
+
+-   Like just have the average, standard deviation, maybe a QQ plot or smth
+
+# Results
+
+# Discussion
+
+# References

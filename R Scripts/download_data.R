@@ -35,7 +35,4 @@ head(toronto_ferry_counts)
 
 slice(toronto_ferry_counts, 300:325)
 
-read_csv(
-  "Toronto Island Ferry Ticket Counts.csv",
-  show_col_types = FALSE
-)
+read_csv("Data/Raw Data/Toronto Island Ferry Ticket Counts.csv")

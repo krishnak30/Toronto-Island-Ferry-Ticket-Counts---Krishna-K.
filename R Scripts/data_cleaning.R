@@ -13,11 +13,7 @@ library(tidyverse)
 library(janitor)
 library(lubridate)
 
-toronto_ferry_counts <-
-  read_csv(
-    file = "Toronto Island Ferry Ticket Counts.csv",
-    show_col_types = FALSE
-  )
+toronto_ferry_counts <-read_csv("Data/Raw Data/Toronto Island Ferry Ticket Counts.csv")
 
 ### Cleaning column names
 cleaned_ticket_counts_data <-
@@ -43,20 +39,26 @@ cleaned_ticket_counts_data <- cleaned_ticket_counts_data |>
   separate(
     col = timestamp,  
     into = c("date", "time"), 
-    sep = " "                   
+    sep = " "
   )
+
+# Converting Date column to date class
+cleaned_ticket_counts_data <- cleaned_ticket_counts_data |>
+  mutate(Date = as.Date(date))
+
+### Removing any duplicate columns, if present
+cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
+  select(-date)
 
 ### Renaming columns for better understanding
 cleaned_ticket_counts_data <-
   cleaned_ticket_counts_data |>
   rename(
     ID = x_id,
-    Date = date,
     Time = time,
     Tickets_Redeemed = redemption_count,
     Tickets_Sold = sales_count,
   )
-
 
 
 ### Checking new column names

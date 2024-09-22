@@ -1,0 +1,7 @@
+how do i sum up the counts for each day and put then in the histogram?
+
+long_ticket_data <- cleaned_ticket_counts_data %>%
+  select(Date, Tickets_Sold, Tickets_Redeemed) %>%
+  pivot_longer(cols = c(Tickets_Sold, Tickets_Redeemed),
+               names_to = "Ticket_Type",
+               values_to = "Count")

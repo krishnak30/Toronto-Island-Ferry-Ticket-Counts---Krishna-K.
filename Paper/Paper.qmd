@@ -11,15 +11,124 @@ number-sections: true
 bibliography: references.bib
 ---
 
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+#install.packages("here")
+#install.packages("kableExtra")
+
+library(tidyverse)
+library(here)
+library(knitr)
+library(kableExtra)
+
+read_csv(here::here("Data/Analysis Data/cleaned_ticket_counts_data.csv"))
+
+```
+
 # Introduction
 
 # Data
 
--   Can add summary stats of the data for the reader to get a better idea
+## Raw Data
 
--   Like just have the average, standard deviation, maybe a QQ plot or smth
+The data used in this paper is derived from Open Data Toronto and is read into this paper using the library opendatatoronto **\[CITE HERE\]**. The data were cleaned and analyzed using the statistical programming language R **\[CITE HERE\].** Simulating, cleaning, and testing the data was done with the help of the following packages: tidyverse **\[CITE HERE\]**, janitor **\[CITE HERE\]**, knitr **\[CITE HERE\]**, kableextra **\[CITE HERE\]**, tex dplyr **\[CITE HERE\]**, and lubridate **\[CITE HERE\]**. The graphs and plots were made using ggplot2 **\[CITE HERE\]**.
 
-# Results
+The data is published by Parks, Forestry, and Recreation and is updated on an hourly basis, providing real-time data and updates. The data provides information regarding the ferries that takes visitors to the Toronto Island Park, which is considered a popular summer spot for tourists and locals alike. These ferries carry passengers to and from Centre Island, Hanlan's Point, and Ward's Island. The raw data features the counts for the total number of tickets redeemed and tickets sold in particular time periods. The time stamps are shows in 15 minute intervals and contain the data for redemptions and sales in the past 15 minutes. The time period for the data set ranges from 2015-05-01 to 2024-09-20 and contains around 229,000 rows/data entries.
+
+Hence, the chosen variables for the data were ID, Date and Timestamp, number of redemption tickets, and number of sales tickets. Moreover, the timestamp column was broken down into two new 'Date' and 'Time' columns for better and deeper analysis.
+
+The variable 'Number of Redemption Tickets' accounted for the number of people who redeemed their tickets to use the ferry to reach the Toronto Islands. The variable 'Number fo Sales Tickets' accounted for the number of people who purchased tickets from POS-Kiosks or online, and encompass all product types.
+
+-   
+
+    ```{r}
+
+    # DATA PREVIEW TABLE
+
+    data_preview <- head(cleaned_ticket_counts_data)
+    kable(data_preview, caption = "Table 1: Sample of Cleaned Ferry Ticket Counts Data")
+
+    data_preview <- head(cleaned_ticket_counts_data, 10)
+     
+    kable(data_preview, 
+          col.names = c("ID", "Time", "Tickets Redeemed", "Tickets Sold", "Date"), 
+        digits = 1,
+        booktabs = TRUE,
+        linesep = "", 
+        align = c("c", "c", "c", "c", "c")
+      )
+
+    ```
+
+    ```{r}
+
+    # Extracting the month number while disregarding the year
+    cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
+      mutate(Month = format(Date, "%m"))  # Extracts the month as "01", "02", etc.
+
+    # Summarizing total tickets sold and redeemed per month across all years
+    monthly_summary <- cleaned_ticket_counts_data %>%
+      group_by(Month) %>%
+      summarize(
+        Total_Sold = sum(Tickets_Sold, na.rm = TRUE),
+        Total_Redeemed = sum(Tickets_Redeemed, na.rm = TRUE)
+      ) %>%
+      pivot_longer(cols = c(Total_Sold, Total_Redeemed), 
+                   names_to = "Ticket_Type", 
+                   values_to = "Total_Count")
+
+    # Convert the month number to actual month names for better readability
+    monthly_summary$Month <- factor(monthly_summary$Month, 
+                                    levels = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"), 
+                                    labels = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
+
+    # Plotting the histogram with numbers on y-axis
+    ggplot(monthly_summary, aes(x = Month, y = Total_Count, fill = Ticket_Type)) +
+      
+      geom_bar(stat = "identity", position = position_dodge(width = 0.9), alpha = 0.7) +
+      labs(x = "Month", y = "Total Count", caption = "Figure 1: Aggregate Monthly Ticket Counts (Sold and Redeemed)", fill = NULL) +
+      
+        scale_fill_manual(values = c("Total_Sold" = "steelblue", "Total_Redeemed" = "orange"),
+                        labels = c("Total Sold", "Total Redeemed")) +
+      
+      scale_y_continuous(labels = scales::comma) +  
+      
+      theme_minimal() + 
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),  
+            axis.title.x = element_text(margin = margin(t = 10)), 
+            axis.title.y = element_text(margin = margin(r = 10)))
+
+
+    ```
+
+    ```{r}
+
+    #TIME SERIES ANALYSIS PLOT 
+
+    library(ggplot2)
+
+    # Reshape data to long format
+    long_ticket_data <- cleaned_ticket_counts_data %>%
+      select(Date, Tickets_Sold, Tickets_Redeemed) %>%
+      pivot_longer(cols = c(Tickets_Sold, Tickets_Redeemed),
+                   names_to = "Ticket_Type",
+                   values_to = "Count")
+
+    # Histogram for Tickets Sold and Redeemed
+    ggplot(long_ticket_data, aes(x = Date, y = Count, fill = Ticket_Type)) +
+      geom_bar(stat = "identity", position = "dodge") +
+      labs(
+          caption = "Figure 1:Tickets Sold and Redeemed by Date",
+           x = "Date",
+           y = "Total Count") +
+      scale_fill_manual(values = c("Tickets_Sold" = "blue", "Tickets_Redeemed" = "orange")) +
+      ylim(0, 1250) +
+      theme_minimal()
+
+    ```
 
 # Discussion
 

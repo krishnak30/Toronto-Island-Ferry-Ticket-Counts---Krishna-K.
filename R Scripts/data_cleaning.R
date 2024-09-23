@@ -60,13 +60,18 @@ cleaned_ticket_counts_data <-
     Tickets_Sold = sales_count,
   )
 
+### Filtering the data set to make the start date January 1st, 2018 
+### and end date September 20th, 2024
+
+cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
+  filter(Date >= as.Date("2018-01-01") & Date <= as.Date("2024-09-20"))
 
 ### Checking new column names
-names(cleaned_ticket_counts_data)
+#names(cleaned_ticket_counts_data)
 
 ### Cleaned data set
 head(cleaned_ticket_counts_data)
-
+tail(cleaned_ticket_counts_data)
 
 
 ### Saving the cleaned data set

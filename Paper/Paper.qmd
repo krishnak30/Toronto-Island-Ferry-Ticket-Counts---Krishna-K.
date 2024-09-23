@@ -1,14 +1,18 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Navigating Trends: Analyzing Ticket Sales and Redemption Patterns For Toronto Island Ferries"
 author: Krishna Kumar
-thanks: "Code and data are available at: LINK."
+thanks: "Code and data are available at: https://github.com/krishnak30/Toronto-Island-Ferry-Ticket-Counts-Krishna-K.git."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This report looks at the ferry services to the Toronto Islands, a significant recreational destination accessible exclusively by water. We analyze a data set of Ferry Ticket Counts from May 2015 to September 2024 in order to find patterns and trends in ferry usage and the effects of external factors. Using time series analysis and data visualization, the data shows that there exist definitive seasonal trends, with sharp declines during the pandemic period. Our findings suggest that ferry usage is highly seasonal and very vulnerable to external shocks. The paper concludes by discussing broader implications for tourism, urban and contingency planning, and public transportation management."
 format: pdf
 number-sections: true
 bibliography: references.bib
+execute:
+  echo: false     # Hide code globally
+  warning: false  # Suppress warnings globally
+  message: false  # Suppress messages globally
+references: true
 ---
 
 ```{r}
@@ -23,113 +27,226 @@ library(tidyverse)
 library(here)
 library(knitr)
 library(kableExtra)
+library(dplyr)
 
-read_csv(here::here("Data/Analysis Data/cleaned_ticket_counts_data.csv"))
+cleaned_ticket_counts_data <- read_csv(here::here("Data/Analysis Data/cleaned_ticket_counts_data.csv"))
 
 ```
 
 # Introduction
 
+The Toronto Islands are a collection of small islands located off the southern shore of Toronto, Canada. Known for their scenic beauty and recreational activities, they serve as a popular vacation spot for tourists and locals alike. The islands feature beaches, parks, restaurants, and other attractions, making them a prime destination. Access to the Toronto islands is exclusively provided (except private water taxis) by the ferry services operated by the Toronto Parks, Forestry, and Recreational department. These ferries carry thousands of visitors daily, especially during peak season, and are essential in the functioning of the islands.
+
+This paper analyzes the ferry ticket sales and redemption data from the Toronto Islands Ferry Service over the following time period: 4th of May, 2015 to the 20th of September, 2024. The Toronto Islands serve not only as a beloved spot for locals, but also as a popular tourist destination, attracting hundreds of thousands of visitors annually. Given the ferry's role as the primary means of transportation to the islands, understanding its usage patterns is critical for officials, policymakers, stakeholders, and business owners in order to improve service efficiency, prepare for fluctuating demand, accommodate future growth, and develop contingency plans. The significance of this research goes well beyond the ferry system, having impacts on issues of urban mobility, tourism management, and even economic recovery in a post-pandemic society.
+
+The paper begins with a comprehensive overview of the chosen data set, detailing the data collection methods, critical data cleaning details, and statistical tools/resources employed for the analysis. Then, the paper presents a series of visualizations such as graphs and tables to illustrate the trend of tickets over time, including a detailed month-by-month analysis of ferry ticket counts. Our findings revealed significant seasonal trends, with notable peaks in ticket counts during the summer months (June to August), confirming our claim. Lastly, we discuss the implications of our findings and the broader context it serves, focusing on the importance of visitor patterns in improving service efficiency and and addressing potential future challenges.
+
+The paper is structured as follows: Section 2 **\[CROSS REFERENCE HERE\]** provides an in-depth discussion of the data, including its source, the critical aspects of the cleaning process, preparation for analysis, as well as discussion of the broader context. Section 3 **\[CROSS REFERENCE HERE\]** presents a detailed analysis of ticket sales and redemption patterns, highlighting key trends, seasonal variations, and the impact of external factors such as the COVID-19 pandemic. Finally, section 4 **\[CROSS REFERENCE HERE\]** discusses the implications of these findings, explores potential applications, and addresses the limitations of this study, offering suggestions for future research.
+
 # Data
 
-## Raw Data
+## Overview
 
-The data used in this paper is derived from Open Data Toronto and is read into this paper using the library opendatatoronto **\[CITE HERE\]**. The data were cleaned and analyzed using the statistical programming language R **\[CITE HERE\].** Simulating, cleaning, and testing the data was done with the help of the following packages: tidyverse **\[CITE HERE\]**, janitor **\[CITE HERE\]**, knitr **\[CITE HERE\]**, kableextra **\[CITE HERE\]**, tex dplyr **\[CITE HERE\]**, and lubridate **\[CITE HERE\]**. The graphs and plots were made using ggplot2 **\[CITE HERE\]**.
+The data used in this paper is derived from Open Data Toronto and is read into this paper using the library opendatatoronto [@opendatatoronto]. The data were cleaned and analyzed using the statistical programming language R [@R]. Simulating, cleaning, and testing the data was done with the help of the following packages: tidyverse [@tidyverse], janitor [@janitor], knitr [@knitr], kableExtra [@kableExtra], dplyr [@dplyr], readr [@readr], here [@here], and lubridate [@lubridate]. The graphs and plots were made using ggplot2 [@ggplot2].
 
-The data is published by Parks, Forestry, and Recreation and is updated on an hourly basis, providing real-time data and updates. The data provides information regarding the ferries that takes visitors to the Toronto Island Park, which is considered a popular summer spot for tourists and locals alike. These ferries carry passengers to and from Centre Island, Hanlan's Point, and Ward's Island. The raw data features the counts for the total number of tickets redeemed and tickets sold in particular time periods. The time stamps are shows in 15 minute intervals and contain the data for redemptions and sales in the past 15 minutes. The time period for the data set ranges from 2015-05-01 to 2024-09-20 and contains around 229,000 rows/data entries.
+The data is published by Parks, Forestry, and Recreation and is updated on an hourly basis, providing real-time data and updates. The data provides information regarding the ferries that takes visitors to the Toronto Island Park, which is considered a popular summer spot for tourists and locals alike. These ferries carry passengers to and from Centre Island, Hanlan's Point, and Ward's Island. The raw data features the counts for the total number of tickets redeemed and tickets sold in particular time periods. The time stamps are shows in 15 minute intervals and contain the data for redemptions and sales in the past 15 minutes. The time period for the data set ranges from the 4th of May, 2015 to the 20th of September, 2024 and contains around 229,000 rows/data entries.
 
-Hence, the chosen variables for the data were ID, Date and Timestamp, number of redemption tickets, and number of sales tickets. Moreover, the timestamp column was broken down into two new 'Date' and 'Time' columns for better and deeper analysis.
+Hence, the chosen variables for the data were ID (unique identifier for each entry), data and time stamps, number of tickets redeemed for ferry access, and the number of tickets purchased. The time stamp column was broken down into two new 'Date of transaction' and 'Time of transaction' columns for better and deeper analysis.
 
-The variable 'Number of Redemption Tickets' accounted for the number of people who redeemed their tickets to use the ferry to reach the Toronto Islands. The variable 'Number fo Sales Tickets' accounted for the number of people who purchased tickets from POS-Kiosks or online, and encompass all product types.
+The variable 'Number of Redemption Tickets' accounted for the number of people who redeemed their tickets to use the ferry to reach the Toronto Islands. The variable 'Number of Sales Tickets' accounted for the number of people who purchased tickets from in-person POS-Kiosks or online platforms, and encompass all product types.
 
--   
+A sample of the cleaned data set can be found in table 1 [@tbl-datapreviewtable] showcasing the variables and the structure of the data.
 
-    ```{r}
+```{r}
 
-    # DATA PREVIEW TABLE
+# CLEANED DATA PREVIEW TABLE
 
-    data_preview <- head(cleaned_ticket_counts_data)
-    kable(data_preview, caption = "Table 1: Sample of Cleaned Ferry Ticket Counts Data")
+#| label: tbl-datapreviewtable
+#| tbl-cap: "Sample of cleaned Ferry Ticket Counts Data"
+#| warning: false
+#| echo: false
+#| message: false
 
-    data_preview <- head(cleaned_ticket_counts_data, 10)
-     
-    kable(data_preview, 
-          col.names = c("ID", "Time", "Tickets Redeemed", "Tickets Sold", "Date"), 
-        digits = 1,
-        booktabs = TRUE,
-        linesep = "", 
-        align = c("c", "c", "c", "c", "c")
-      )
+data_preview <- head(cleaned_ticket_counts_data, 10)
+ 
+kable(data_preview,
+      caption = "Sample of Cleaned Ferry Ticket Counts Data",
+      col.names = c("ID", "Time", "Tickets Redeemed", "Tickets Sold", "Date"), 
+    digits = 1,
+    booktabs = TRUE,
+    linesep = "", 
+    align = c("c", "c", "c", "c", "c")
+  )
 
-    ```
+```
 
-    ```{r}
+## Data Cleaning
 
-    # Extracting the month number while disregarding the year
-    cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
-      mutate(Month = format(Date, "%m"))  # Extracts the month as "01", "02", etc.
+The data cleaning process involved breaking down the 'timestamp' column into two 'Date' and 'Time' columns for a better and more clear analysis. Along with changing names of the columns, deleting duplicate columns, and removing entries from the data that served as outliers.
 
-    # Summarizing total tickets sold and redeemed per month across all years
-    monthly_summary <- cleaned_ticket_counts_data %>%
-      group_by(Month) %>%
-      summarize(
-        Total_Sold = sum(Tickets_Sold, na.rm = TRUE),
-        Total_Redeemed = sum(Tickets_Redeemed, na.rm = TRUE)
-      ) %>%
-      pivot_longer(cols = c(Total_Sold, Total_Redeemed), 
-                   names_to = "Ticket_Type", 
-                   values_to = "Total_Count")
+## Broader Context
 
-    # Convert the month number to actual month names for better readability
-    monthly_summary$Month <- factor(monthly_summary$Month, 
-                                    levels = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"), 
-                                    labels = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
+This data was the only of its kind on the Open Data Toronto library, providing the numbers for the ticket counts of ferry use for the Toronto Islands. This data was chosen due to the broader context and the potential for discussion. This data set is essential in understanding the urban mobility and recreational trends in Toronto.
 
-    # Plotting the histogram with numbers on y-axis
-    ggplot(monthly_summary, aes(x = Month, y = Total_Count, fill = Ticket_Type)) +
-      
-      geom_bar(stat = "identity", position = position_dodge(width = 0.9), alpha = 0.7) +
-      labs(x = "Month", y = "Total Count", caption = "Figure 1: Aggregate Monthly Ticket Counts (Sold and Redeemed)", fill = NULL) +
-      
-        scale_fill_manual(values = c("Total_Sold" = "steelblue", "Total_Redeemed" = "orange"),
-                        labels = c("Total Sold", "Total Redeemed")) +
-      
-      scale_y_continuous(labels = scales::comma) +  
-      
-      theme_minimal() + 
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),  
-            axis.title.x = element_text(margin = margin(t = 10)), 
-            axis.title.y = element_text(margin = margin(r = 10)))
+[Firstly]{.underline}, as Toronto Islands Park is a major recreational area, it affects millions of visitors annually. The ferry contributes to the local economy through tourism-related spending. Understanding these patterns can help us gain insights into seasonal fluctuations in tourism and help local businesses (close to Toronto Islands) optimize their offerings. For example, increased ferry usage during the summer may correlate with higher foot traffic for restaurants and vendors on the islands. [Secondly]{.underline}, while private water taxis are available to get to the islands, a large majority prefers to use the ferry due to the relatively lower price point and the fact that the ticket is free on the way back. By analyzing redemption and sales tickets, city planers and transportation officials can better understand the demand patterns, which can help them schedule service improvements. [Lastly]{.underline}, analyzing ticket counts and patterns of increase usage can be important when designing public safety protocols. By understanding the usage patters, officials are able to have tailored contingency plans. For example, at the event of a fire at the islands and when evacuation is needed, less support might be required in the winter season compared to the summer.
+
+## Basic Summary Statistics
+
+The summary statistics are provided in table 2 [@tbl-summary] and allow us to get an understanding of the data in a very comprehensible manner. The high volume of tickets sold and redeemed indicates a healthy and significant demand of the ferry and the closeness of the values conveys strong customer engagement and a reliable service. On average, 49.36 tickets were sold every 15 minutes during working hours, and 48.44 tickets were redeemed, indicating that most customers utilized their tickets. However, the small gap implies some no-shows or unused tickets. The maximum numbers of redemption and sales tickets (7,216 and 7,229) showcases the ferry's ability to handle high customer volumes and the closeness of these values tells us that, on busy days, the ferry usually operates at capacity.
+
+Moreover, the relationships between the variables allow us to understand more about the patterns and usage. The high correlation between the number of tickets redeemed and sold (\~ 98% of sold tickets were redeemed!) suggests that the customer satisfaction is high and that the ferry is able to meet demands. The averages and the maximum numbers show us that there is high correlation between the number of tickets sold and redeemed, suggesting good operational viability. Lastly, the minimum values of 0 for both types of tickets suggest that there are periods of little-to-no demand, which typically occur during off-peak hours and off-seasons (which we will analyse soon).
+
+\newpage
+
+```{r}
+### WHAT THE FUCK, HOW DO I MAKE THIS FIT IN
+# SUMMARY TABLE 
 
 
-    ```
+#| label: tbl-summary
+#| tbl-cap: "Summary Statistics of Ticket Counts"
+#| warning: false
+#| echo: false
+#| message: false
 
-    ```{r}
 
-    #TIME SERIES ANALYSIS PLOT 
+summary_table <- cleaned_ticket_counts_data %>%
+    summarize(
+        'Avg Redeemed' = mean(Tickets_Redeemed, na.rm = TRUE),
+        'Avg Sold' = mean(Tickets_Sold, na.rm = TRUE),
+        'Max Redeemed' = max(Tickets_Redeemed, na.rm = TRUE),
+        'Max Sold' = max(Tickets_Sold, na.rm = TRUE),
+        Count = n()
+    )
 
-    library(ggplot2)
+# Print the summary table 
+kable(summary_table, caption = "Summary Statistics of Ticket Counts", format = "latex", booktabs = TRUE) %>%
+  kable_styling(full_width = FALSE, position = "center", (latex_options = c("hold_position", "repeat_header"))) %>%  
+  column_spec(1:5, width = "2cm")
 
-    # Reshape data to long format
-    long_ticket_data <- cleaned_ticket_counts_data %>%
-      select(Date, Tickets_Sold, Tickets_Redeemed) %>%
-      pivot_longer(cols = c(Tickets_Sold, Tickets_Redeemed),
-                   names_to = "Ticket_Type",
-                   values_to = "Count")
+```
 
-    # Histogram for Tickets Sold and Redeemed
-    ggplot(long_ticket_data, aes(x = Date, y = Count, fill = Ticket_Type)) +
-      geom_bar(stat = "identity", position = "dodge") +
-      labs(
-          caption = "Figure 1:Tickets Sold and Redeemed by Date",
-           x = "Date",
-           y = "Total Count") +
-      scale_fill_manual(values = c("Tickets_Sold" = "blue", "Tickets_Redeemed" = "orange")) +
-      ylim(0, 1250) +
-      theme_minimal()
+## Ferry Ticket Counts Over Time
 
-    ```
+After studying the summary statistics, we have an idea of the capacity and performance of the ferry, along with the relationships between the variables. Next, with the use fo figure 1 [@fig-timeseriesanalysis], we can study the patterns of ticket counts from 2015 to 2024. For figure1, we can see that there is a definitive pattern in the usage numbers when looking at each year. We see that there are spikes during the mid-year months for each year, indicating higher popularity of the Toronto Islands during those times and suggesting that the islands serve as a significant recreational destination.
+
+We can also see that for every year, there is a slow climb from the beginning of the year (which starts very low) indicating an off-season and the start of the tourist season. Conversely, there is a gradual decline during the end of the year (also indicating an off-season) which confirms a seasonal drop in demand as the cold weather deters visitors. The highs in each year are steady at 800 - 1000 for the number of tickets sold in one interval, however, the highs for the number of tickets redeemed are usually lower, but ever-fluctuating. This fluctuation and discrepency could indicate that not all passengers redeem their tickets within the same time frame or that there are differences in purchasing behavior.
+
+Notably, figure 1 [@fig-timeseriesanalysis] also shows an anomaly during the years of 2020 and 2021, conveyed by highly depressed sales and redemption ticket counts. This can be attributed to the COVID-19 pandemic, which lead to widespread public facility closures and reduced operational capacities. The peak ticket count in 2020, reaching only about 200, is in high contrast with every other year, highlighting the pandemic's massive impact on public transportation and tourism.
+
+```{r}
+
+#TIME SERIES ANALYSIS PLOT 
+
+#| label: fig-timeseriesanalysis
+#| fig-cap: "Tickets Sold and Redeemed by Date"
+#| warning: false
+#| echo: false
+#| message: false
+#| fig-align: center
+
+
+library(ggplot2)
+
+# Reshape data to long format
+long_ticket_data <- cleaned_ticket_counts_data %>%
+  select(Date, Tickets_Sold, Tickets_Redeemed) %>%
+  pivot_longer(cols = c(Tickets_Sold, Tickets_Redeemed),
+               names_to = "Ticket_Type",
+               values_to = "Count")
+
+# Histogram for Tickets Sold and Redeemed
+ggplot(long_ticket_data, aes(x = Date, y = Count, fill = Ticket_Type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+      caption = "Figure 1:Tickets Sold and Redeemed by Date",
+       x = "Date",
+       y = "Total Count") +
+  scale_fill_manual(values = c("Tickets_Sold" = "blue", "Tickets_Redeemed" = "orange"), 
+                    labels = c("Tickets Sold", "Tickets Redeemed")) +
+  ylim(0, 1250) +
+  theme_minimal()
+
+```
+
+## Month-by-Month Analysis
+
+To build on our understanding of overall ticket trends observed in the previous section, it is essential to analyze the month-by-month usage to better understand usage patterns in each year. These patterns may not be visible in the previous section due to the large time range of the data.
+
+Figure 2 [@fig-monthanalysis], shows a monthly analysis of redemption and sales ticket counts for each year. The data in this figure has been grouped together and summed. i.e. the ticket counts for each of the 12 months in every year from 2015 to 2024 has been summed and aggregated so that we can see the monthly trends over the past 9 years.
+
+The graph shows distinct peaks in ticket sales and redemption during the summer months (June to August), aligning with the typical tourist season and confirming the ferry's role in providing transportation to the islands. In addition to the tourist season, individuals might prefer to go to the islands in these months due to the beach activities and the availability of restaurants and vendors. Conversely, the months of October through April show noticeably lower ticket counts, consistent with weather conditions in Toronto where temperatures often drop below zero degree Celsius. Hence, deterring visitors from the islands.
+
+Interestingly, every month shows the close correlation between the sales and redemption tickets and what implications this has for the ferry service.
+
+```{r}
+
+## MONTH BY MONTH ANALYSIS
+
+#| label: fig-monthanalysis
+#| fig-cap: "Aggregate Monthly Ticket Counts (Sold and Redeemed)"
+#| warning: false
+#| echo: false
+#| message: false
+#| fig-align: center
+
+
+# Extracting the month number while disregarding the year
+cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
+  mutate(Month = format(Date, "%m"))  # Extracts the month as "01", "02", etc.
+
+# Summarizing total tickets sold and redeemed per month across all years
+monthly_summary <- cleaned_ticket_counts_data %>%
+  group_by(Month) %>%
+  summarize(
+    Total_Sold = sum(Tickets_Sold, na.rm = TRUE),
+    Total_Redeemed = sum(Tickets_Redeemed, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(Total_Sold, Total_Redeemed), 
+               names_to = "Ticket_Type", 
+               values_to = "Total_Count")
+
+# Converting the month number to actual month names
+monthly_summary$Month <- factor(monthly_summary$Month, 
+                                levels = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"), 
+                                labels = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
+
+# Plotting the histogram
+ggplot(monthly_summary, aes(x = Month, y = Total_Count, fill = Ticket_Type)) +
+  
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9), alpha = 0.7) +
+  labs(
+    x = "Month", 
+    y = "Total Count", 
+    caption = "Figure 2: Aggregate Monthly Ticket Counts (Sold and Redeemed)", fill = NULL) +
+  
+    scale_fill_manual(values = c("Total_Sold" = "steelblue", "Total_Redeemed" = "orange"),
+                    labels = c("Total Sold", "Total Redeemed")) +
+  
+  scale_y_continuous(labels = scales::comma) +  
+  
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),  
+        axis.title.x = element_text(margin = margin(t = 10)), 
+        axis.title.y = element_text(margin = margin(r = 10)))
+```
 
 # Discussion
+
+This paper ferry ticket data from Open Data Toronto, focusing on the trends of ticket sales and redemptions from the 4th of May, 2015 to the 20th of September, 2024. Through summary statistics and visualizations, we identified distinct patters in ferry usage and how external factors have influenced these trends. The time series analysis illustrated a consistent peak in ferry activity during the summer months, while the month-by-month backed up this claim and showed how seasonal variations impacted ticket counts.
+
+The analysis that ticket sales and redemptions are highly seasonal due to the nature of the Toronto Islands and the activities present. We saw peaks during the summer months, which align with the tourist season in Toronto, showing that the ferry plays an important role in facilitating access to the islands. We concluded that the ferry is not only a transportation service, but also contributes to the local economy by supporting tourism-related activities. Understanding these patterns allows stakeholders, business owners, and officials to plan for peal periods and allocate resources accordingly.
+
+The ferry and the number of visits to the Toronto islands is highly affected by external factors, as we saw the notable decline in ticket counts during the COVID 19 pandemic years (2020 - 2021). This insight is essential for policymakers and service providers to consider as it emphasizes the need for contingency planning and adapting in unprecedented circumstances.
+
+## Limitations and Next Steps
+
+While the analysis provides valuable insights into ferry ticket trends and Toronto Islands Popularity, it does not come without limitations. The data set is primarily focused on ticket sales and redemptions, which may not fully capture the complexity of factors influencing ferry usage and the number of visits to Toronto Islands. For example, weather conditions, public events, changes in tourism trends, or construction were not incorporated in this research. Furthermore, just because we saw an increase in ferry usage in the summer months doesn't necessarily mean that these are due to the tourists. Due to the cold weather, people (even locals) prefer to visit Toronto islands in the summer. Hence, it is difficult to determine whether the jump in ferry tickets were due to the increase in tourism or just because of the summer months.
+
+Moreover, I believe that this research can greatly benefit by complementing with another data set such as the number of tourists visiting Toronto, or analyzing the activities at the Toronto Islands and determining which season they're better for. Incorporating other data sets would allow us to reach a more definitive conclusion about a claim.
+
+Overall, this paper provides a great analysis of the ferry ticket counts for Toronto islands and serves as a solid foundation for future research.
+
+\newpage
 
 # References

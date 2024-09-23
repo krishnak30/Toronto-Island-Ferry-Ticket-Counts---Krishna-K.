@@ -28,11 +28,11 @@ toronto_ferry_counts <-
 
 write_csv(
   x = toronto_ferry_counts, 
-  file = "Data/Raw Data/Toronto Island Ferry Ticket Counts.csv"
+  file = "Data/Raw_Data/Toronto Island Ferry Ticket Counts.csv"
 )
 
 head(toronto_ferry_counts)
 
 slice(toronto_ferry_counts, 300:325)
 
-read_csv("Data/Raw Data/Toronto Island Ferry Ticket Counts.csv")
+read_csv("Data/Raw_Data/Toronto Island Ferry Ticket Counts.csv")

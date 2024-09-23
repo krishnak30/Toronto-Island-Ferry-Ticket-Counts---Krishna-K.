@@ -13,7 +13,7 @@ library(tidyverse)
 library(janitor)
 library(lubridate)
 
-toronto_ferry_counts <-read_csv("Data/Raw Data/Toronto Island Ferry Ticket Counts.csv")
+toronto_ferry_counts <-read_csv("Data/Raw_Data/Toronto Island Ferry Ticket Counts.csv")
 
 ### Cleaning column names
 cleaned_ticket_counts_data <-
@@ -72,7 +72,7 @@ head(cleaned_ticket_counts_data)
 ### Saving the cleaned data set
 write_csv(
   x = cleaned_ticket_counts_data,
-  file = "Data/Analysis Data/cleaned_ticket_counts_data.csv"
+  file = "Data/Analysis_Data/cleaned_ticket_counts_data.csv"
 )
 
 

@@ -45,6 +45,6 @@ tail(simulated_ticket_data)
 
 ### Saving the simulated data ###
 
-write_csv(simulated_ticket_data, file = "Data/Raw Data/simulated_data.csv")
+write_csv(simulated_ticket_data, file = "Data/Raw_Data/simulated_data.csv")
 
 

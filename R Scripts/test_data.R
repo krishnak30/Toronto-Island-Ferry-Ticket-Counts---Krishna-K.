@@ -13,7 +13,7 @@ library(tidyverse)
 
 ### Testing the data ###
 
-data <- read_csv("Data/Raw Data/simulated_data.csv")
+data <- read_csv("Data/Raw_Data/simulated_data.csv")
 
 # Testing for negative numbers
 data$redemption_tickets |> min() <= 0

@@ -1,0 +1,23 @@
+How can i extract the data for the months and aggregate them so I can make a month by month comparison of the ticket counts?
+
+
+# Extract the month number while disregarding the year
+cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%
+  mutate(Month = format(Date, "%m"))  # Extracts the month as "01", "02", etc.
+
+# Summarize total tickets sold and redeemed per month across all years
+monthly_summary <- cleaned_ticket_counts_data %>%
+  group_by(Month) %>%
+  summarize(
+    Total_Sold = sum(Tickets_Sold, na.rm = TRUE),
+    Total_Redeemed = sum(Tickets_Redeemed, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(Total_Sold, Total_Redeemed), 
+               names_to = "Ticket_Type", 
+               values_to = "Total_Count")
+
+# Convert the month number to actual month names for better readability
+monthly_summary$Month <- factor(monthly_summary$Month, 
+                                levels = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"), 
+                                labels = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
+                                "July", "August", "September", "October", "November", "December"))

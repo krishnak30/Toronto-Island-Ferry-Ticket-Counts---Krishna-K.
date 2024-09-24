@@ -56,12 +56,9 @@ Hence, the chosen variables for the data were ID (unique identifier for each ent
 
 The variable 'Number of Redemption Tickets' accounted for the number of people who redeemed their tickets to use the ferry to reach the Toronto Islands. The variable 'Number of Sales Tickets' accounted for the number of people who purchased tickets from in-person POS-Kiosks or online platforms, and encompass all product types.
 
-A sample of the cleaned data set can be found in table 1 [@tbl-datapreviewtable] showcasing the variables and the structure of the data.
+A sample of the cleaned data set can be found in [@tbl-datapreviewtable] showcasing the variables and the structure of the data.
 
 ```{r}
-
-# CLEANED DATA PREVIEW TABLE
-
 #| label: tbl-datapreviewtable
 #| tbl-cap: "Sample of cleaned Ferry Ticket Counts Data"
 #| warning: false
@@ -71,7 +68,6 @@ A sample of the cleaned data set can be found in table 1 [@tbl-datapreviewtable]
 data_preview <- head(cleaned_ticket_counts_data, 10)
  
 kable(data_preview,
-      caption = "Sample of Cleaned Ferry Ticket Counts Data",
       col.names = c("ID", "Time", "Tickets Redeemed", "Tickets Sold", "Date"), 
     digits = 1,
     booktabs = TRUE,
@@ -93,16 +89,13 @@ This data was the only of its kind on the Open Data Toronto library, providing t
 
 ## Basic Summary Statistics
 
-The summary statistics are provided in table 2 [@tbl-summary] and allow us to get an understanding of the data in a very comprehensible manner. The high volume of tickets sold and redeemed indicates a healthy and significant demand of the ferry and the closeness of the values conveys strong customer engagement and a reliable service. On average, 46.92 tickets were sold every 15 minutes during working hours, and 47.37 tickets were redeemed, indicating that most customers utilized their tickets. However, the small gap implies some no-shows or unused tickets. The maximum numbers of redemption and sales tickets (7,216 and 7,229) showcases the ferry's ability to handle high customer volumes and the closeness of these values tells us that, on busy days, the ferry usually operates at capacity.
+The summary statistics are provided in [@tbl-summary] and allow us to get an understanding of the data in a very comprehensible manner. The high volume of tickets sold and redeemed indicates a healthy and significant demand of the ferry and the closeness of the values conveys strong customer engagement and a reliable service. On average, 46.92 tickets were sold every 15 minutes during working hours, and 47.37 tickets were redeemed, indicating that most customers utilized their tickets. However, the small gap implies some no-shows or unused tickets. The maximum numbers of redemption and sales tickets (7,216 and 7,229) showcases the ferry's ability to handle high customer volumes and the closeness of these values tells us that, on busy days, the ferry usually operates at capacity.
 
 Moreover, the relationships between the variables allow us to understand more about the patterns and usage. The high correlation between the number of tickets redeemed and sold (\~ 98% of sold tickets were redeemed!) suggests that the customer satisfaction is high and that the ferry is able to meet demands. The averages and the maximum numbers show us that there is high correlation between the number of tickets sold and redeemed, suggesting good operational viability. Lastly, the minimum values of 0 for both types of tickets suggest that there are periods of little-to-no demand, which typically occur during off-peak hours and off-seasons (which we will analyse soon).
 
 \newpage
 
 ```{r}
-# SUMMARY TABLE 
-
-
 #| label: tbl-summary
 #| tbl-cap: "Summary Statistics of Ticket Counts"
 #| warning: false
@@ -120,7 +113,7 @@ summary_table <- cleaned_ticket_counts_data %>%
     )
 
 # Print the summary table 
-kable(summary_table, caption = "Summary Statistics of Ticket Counts", format = "latex", booktabs = TRUE) %>%
+kable(summary_table, format = "latex", booktabs = TRUE) %>%
   kable_styling(full_width = FALSE, position = "center", (latex_options = c("hold_position", "repeat_header"))) %>%  
   column_spec(1:5, width = "2cm")
 
@@ -128,22 +121,19 @@ kable(summary_table, caption = "Summary Statistics of Ticket Counts", format = "
 
 ## Ferry Ticket Counts Over Time
 
-After studying the summary statistics, we have an idea of the capacity and performance of the ferry, along with the relationships between the variables. Next, with the use fo figure 1 [@fig-timeseriesanalysis], we can study the patterns of ticket counts from 2018 to 2024. For figure1, we can see that there is a definitive pattern in the usage numbers when looking at each year. We see that there are spikes during the mid-year months for each year, indicating higher popularity of the Toronto Islands during those times and suggesting that the islands serve as a significant recreational destination.
+After studying the summary statistics, we have an idea of the capacity and performance of the ferry, along with the relationships between the variables. Next, with the use of[@fig-timeseriesanalysis], we can study the patterns of ticket counts from 2018 to 2024. For figure 1, we can see that there is a definitive pattern in the usage numbers when looking at each year. We see that there are spikes during the mid-year months for each year, indicating higher popularity of the Toronto Islands during those times and suggesting that the islands serve as a significant recreational destination.
 
-We can also see that for every year, there is a slow climb from the beginning of the year (which starts very low) indicating an off-season and the start of the tourist season. Conversely, there is a gradual decline during the end of the year (also indicating an off-season) which confirms a seasonal drop in demand as the cold weather deters visitors. The highs in each year are steady at 800 - 1000 for the number of tickets sold in one interval, however, the highs for the number of tickets redeemed are usually lower, but ever-fluctuating. This fluctuation and discrepency could indicate that not all passengers redeem their tickets within the same time frame or that there are differences in purchasing behavior.
+We can also see that for every year, there is a slow climb from the beginning of the year (which starts very low) indicating an off-season and the start of the tourist season. Conversely, there is a gradual decline during the end of the year (also indicating an off-season) which confirms a seasonal drop in demand as the cold weather deters visitors. The highs in each year are steady at 800 - 1000 for the number of tickets sold in one interval, however, the highs for the number of tickets redeemed are usually lower, but ever-fluctuating. This fluctuation and discrepancy could indicate that not all passengers redeem their tickets within the same time frame or that there are differences in purchasing behavior.
 
-Notably, figure 1 [@fig-timeseriesanalysis] also shows an anomaly during the years of 2020 and 2021, conveyed by highly depressed sales and redemption ticket counts. This can be attributed to the COVID-19 pandemic, which lead to widespread public facility closures and reduced operational capacities. The peak ticket count in 2020, reaching only about 200, is in high contrast with every other year, highlighting the pandemic's massive impact on public transportation and tourism.
+Notably, [@fig-timeseriesanalysis] also shows an anomaly during the years of 2020 and 2021, conveyed by highly depressed sales and redemption ticket counts. This can be attributed to the COVID-19 pandemic, which lead to widespread public facility closures and reduced operational capacities. The peak ticket count in 2020, reaching only about 200, is in high contrast with every other year, highlighting the pandemic's massive impact on public transportation and tourism.
 
 ```{r}
-
-#TIME SERIES ANALYSIS PLOT 
-
 #| label: fig-timeseriesanalysis
-#| fig-cap: "Tickets Sold and Redeemed by Date"
+#| fig-cap: "Tickets Sold and Redeemed per 15 min Interval"
 #| warning: false
 #| echo: false
 #| message: false
-#| fig-align: "center"
+#| fig-align: center
 
 
 library(ggplot2)
@@ -159,30 +149,30 @@ long_ticket_data <- cleaned_ticket_counts_data %>%
 ggplot(long_ticket_data, aes(x = Date, y = Count, fill = Ticket_Type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
-      caption = "Figure 1:Tickets Sold and Redeemed by Date",
        x = "Date",
        y = "Total Count") +
   scale_fill_manual(values = c("Tickets_Sold" = "blue", "Tickets_Redeemed" = "orange"), 
                     labels = c("Tickets Sold", "Tickets Redeemed")) +
   ylim(0, 1250) +
-  theme_minimal()
+  theme_minimal() + 
+  theme(axis.title.x = element_text(margin = margin(t = 10)), 
+        axis.title.y = element_text(margin = margin(r = 10)))
 
 ```
+
+\newpage
 
 ## Month-by-Month Analysis
 
 To build on our understanding of overall ticket trends observed in the previous section, it is essential to analyze the month-by-month usage to better understand usage patterns in each year. These patterns may not be visible in the previous section due to the large time range of the data.
 
-Figure 2 [@fig-monthanalysis], shows a monthly analysis of redemption and sales ticket counts for each year. The data in this figure has been grouped together and summed. i.e. the ticket counts for each of the 12 months in every year from 2018 to 2024 has been summed and aggregated so that we can see the monthly trends over the past 6 years.
+[@fig-monthanalysis] shows a monthly analysis of redemption and sales ticket counts for each year. The data in this figure has been grouped together and summed. i.e. the ticket counts for each of the 12 months in every year from 2018 to 2024 has been summed and aggregated so that we can see the monthly trends over the past 6 years.
 
 The graph shows distinct peaks in ticket sales and redemption during the summer months (June to August), aligning with the typical tourist season and confirming the ferry's role in providing transportation to the islands. In addition to the tourist season, individuals might prefer to go to the islands in these months due to the beach activities and the availability of restaurants and vendors. Conversely, the months of October through April show noticeably lower ticket counts, consistent with weather conditions in Toronto where temperatures often drop below zero degree Celsius. Hence, deterring visitors from the islands.
 
 Interestingly, every month shows the close correlation between the sales and redemption tickets and what implications this has for the ferry service.
 
 ```{r}
-
-## MONTH BY MONTH ANALYSIS
-
 #| label: fig-monthanalysis
 #| fig-cap: "Aggregate Monthly Ticket Counts (Sold and Redeemed)"
 #| warning: false
@@ -218,7 +208,7 @@ ggplot(monthly_summary, aes(x = Month, y = Total_Count, fill = Ticket_Type)) +
   labs(
     x = "Month", 
     y = "Total Count", 
-    caption = "Figure 2: Aggregate Monthly Ticket Counts (Sold and Redeemed)", fill = NULL) +
+     fill = NULL) +
   
     scale_fill_manual(values = c("Total_Sold" = "steelblue", "Total_Redeemed" = "orange"),
                     labels = c("Total Sold", "Total Redeemed")) +

@@ -1,4 +1,8 @@
+User: 
+
 how do i sum up the counts for each day and put then in the histogram?
+
+ChatGPT: 
 
 long_ticket_data <- cleaned_ticket_counts_data %>%
   select(Date, Tickets_Sold, Tickets_Redeemed) %>%

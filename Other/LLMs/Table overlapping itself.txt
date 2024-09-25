@@ -1,4 +1,6 @@
-Q: and this table: 
+User: 
+
+and this table: 
 
 # SUMMARY TABLE 
 
@@ -25,7 +27,7 @@ kable(summary_table, caption = "Table 2: Summary Statistics of Ticket Counts")
 
 is completely overlapping itself in the document, completely unreadable
 
-ANS:
+ChatGPT: 
 
 To fix the table rendering and ensure it's displayed properly, you can adjust the `kable` function options to handle formatting and alignment. Here's an updated version of your code that includes some modifications to improve the table's readability in the PDF:
 

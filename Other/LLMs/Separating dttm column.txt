@@ -1,4 +1,8 @@
-ASKED HOW TO SEPARATE A DTTM COLUMN INTO TWO DATE AND TIME COLUMNS
+User: 
+
+HOW TO SEPARATE A DTTM COLUMN INTO TWO DATE AND TIME COLUMNS
+
+ChatGPT: 
 
 You can use the `separate()` function to split a `YYYY-MM-DD HH:MM:SS` formatted column into four separate columns: one for the year, one for the month, one for the day, and one for the time (hours, minutes, and seconds). Here's an example of how to do this:
 

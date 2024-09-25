@@ -1,8 +1,10 @@
+User: 
+
 okay so how do i filter it such that the start date is 2018 and end is 2024 sept
 
 
 ChatGPT said:
-ChatGPT
+
 You can filter your cleaned dataset to include only the data from January 1, 2018, to September 20, 2024, using the filter() function from the dplyr package. Here’s how you can do it:
 
 r

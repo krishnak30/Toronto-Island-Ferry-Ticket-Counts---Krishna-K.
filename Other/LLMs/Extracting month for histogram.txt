@@ -1,5 +1,9 @@
+User: 
+
 How can i extract the data for the months and aggregate them so I can make a month by month comparison of the ticket counts?
 
+
+ChatGPT: 
 
 # Extract the month number while disregarding the year
 cleaned_ticket_counts_data <- cleaned_ticket_counts_data %>%

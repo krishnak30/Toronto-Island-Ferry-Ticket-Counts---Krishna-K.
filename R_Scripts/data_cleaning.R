@@ -80,4 +80,24 @@ write_csv(
   file = "Data/Analysis_Data/cleaned_ticket_counts_data.csv"
 )
 
+--
 
+  ### Testing the cleaned data ###
+  
+  # Reading the cleaned data
+  cleaned_data <- read_csv("Data/Analysis_Data/cleaned_ticket_counts_data.csv")
+
+# Testing for negative numbers
+min(cleaned_data$Tickets_Redeemed) >= 0  
+min(cleaned_data$Tickets_Sold) >= 0  
+
+# Testing for NAs
+all(is.na(cleaned_data$Tickets_Redeemed))  
+all(is.na(cleaned_data$Tickets_Sold))  
+
+# Testing for starting year
+cleaned_data$Year <- as.integer(format(cleaned_data$Date, "%Y"))
+min(cleaned_data$Year) >= 2018  # Ensure the minimum year is 2018
+
+# Testing for all the unique years in the cleaned data
+unique(cleaned_data$Year)

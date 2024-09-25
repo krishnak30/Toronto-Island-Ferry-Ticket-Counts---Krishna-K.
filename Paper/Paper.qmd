@@ -1,5 +1,6 @@
 ---
-title: "Navigating Trends: Analyzing Ticket Sales and Redemption Patterns For Toronto Island Ferries"
+title: "Summer Peaks and Winter Lows: An Analysis of Toronto Island Ferry Ticket Counts"
+subtitle: "What Six Years of Data Reveal About Ferry Usage, Visitor Patterns, and Seasonal Consumer Behaviour"
 author: Krishna Kumar
 thanks: "Code and data are available at: https://github.com/krishnak30/Toronto-Island-Ferry-Ticket-Counts-Krishna-K.git."
 date: today
@@ -48,7 +49,7 @@ The paper is structured as follows: Section 2 provides an in-depth discussion of
 
 ## Overview
 
-The data used in this paper is derived from Open Data Toronto and is read into this paper using the library opendatatoronto [@opendatatoronto]. The data were cleaned and analyzed using the statistical programming language R [@R]. Simulating, cleaning, and testing the data was done with the help of the following packages: tidyverse [@tidyverse], janitor [@janitor], knitr [@knitr], kableExtra [@kableExtra], dplyr [@dplyr], readr [@readr], here [@here], and lubridate [@lubridate]. The graphs and plots were made using ggplot2 [@ggplot2].
+The data used in this paper is derived from Open Data Toronto and is read into this paper using the library 'opendatatoronto' [@opendatatoronto]. The data were cleaned and analyzed using the statistical programming language 'R' [@R]. Simulating, cleaning, and testing the data was done with the help of the following packages: 'tidyverse' [@tidyverse], 'janitor' [@janitor], 'knitr' [@knitr], 'kableExtra' [@kableExtra], 'dplyr' [@dplyr], 'readr' [@readr], 'here' [@here], and 'lubridate' [@lubridate]. The graphs and plots were made using 'ggplot2' [@ggplot2].
 
 The data is published by Parks, Forestry, and Recreation and is updated on an hourly basis, providing real-time data and updates. The data provides information regarding the ferries that takes visitors to the Toronto Island Park, which is considered a popular summer spot for tourists and locals alike. These ferries carry passengers to and from Centre Island, Hanlan's Point, and Ward's Island. The raw data features the counts for the total number of tickets redeemed and tickets sold in particular time periods. The time stamps are shows in 15 minute intervals and contain the data for redemptions and sales in the past 15 minutes. The time period for the data set ranges from the 1st of January, 2018 to the 20th of September, 2024 and contains around 229,000 rows/data entries.
 
@@ -170,7 +171,7 @@ To build on our understanding of overall ticket trends observed in the previous 
 
 The graph shows distinct peaks in ticket sales and redemption during the summer months (June to August), aligning with the typical tourist season and confirming the ferry's role in providing transportation to the islands. In addition to the tourist season, individuals might prefer to go to the islands in these months due to the beach activities and the availability of restaurants and vendors. Conversely, the months of October through April show noticeably lower ticket counts, consistent with weather conditions in Toronto where temperatures often drop below zero degree Celsius. Hence, deterring visitors from the islands.
 
-Interestingly, every month shows the close correlation between the sales and redemption tickets and what implications this has for the ferry service.
+Interestingly, every month shows a close correlation between the sales and redemption tickets and what implications this has for the ferry service. The values for sales and redemption ticket counts are extremely close together for all months as displayed in @fig-monthanalysis.
 
 ```{r}
 #| label: fig-monthanalysis

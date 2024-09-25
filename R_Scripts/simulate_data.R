@@ -21,7 +21,7 @@ set.seed(420)
 
 ## Setting a start and end date
 
-start_date <- as.Date("2015-01-01")
+start_date <- as.Date("2018-01-01")
 end_date <- Sys.Date()  # Current date
 num_days <- as.numeric(end_date - start_date) + 1 
 

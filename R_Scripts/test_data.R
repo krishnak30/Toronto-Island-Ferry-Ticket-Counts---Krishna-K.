@@ -30,7 +30,7 @@ unique(data$year)
 # Testing for starting year
 data$year <- as.integer(format(as.Date(data$timestamp), "%Y"))
 
-min(data$year) >= 2015  # Adjust as necessary
+min(data$year) >= 2018  
 
 # Testing for all the unique years
 

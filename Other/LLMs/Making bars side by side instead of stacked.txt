@@ -1,4 +1,8 @@
+User: 
+
 How do i make the bars in the histogram side by side instead of stacked on each other? you can barely see the blue ones
+
+ChatGPT: 
 
 monthly_summary <- cleaned_ticket_counts_data %>%
   group_by(Month) %>%

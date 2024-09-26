@@ -1,0 +1,10 @@
+User: 
+
+How do i set the end date as present day? 
+
+ChatGPT:
+
+# Define the start date and the number of days until the present
+start_date <- as.Date("2015-01-01")
+end_date <- Sys.Date()  # Current date
+num_days <- as.numeric(end_date - start_date) + 1  # Include the start date

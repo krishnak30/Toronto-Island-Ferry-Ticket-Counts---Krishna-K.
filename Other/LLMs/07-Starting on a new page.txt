@@ -1,0 +1,21 @@
+User: 
+
+how do i make it such that some content starts from a new page in the pdf
+
+ChatGPT: 
+
+Insert \newpage: Place \newpage on its own line where you want the new page to begin. This command tells LaTeX to start a new page.
+Example Usage
+Here’s a basic example:
+
+markdown
+Copy code
+# First Section
+
+This is some content on the first page.
+
+\newpage
+
+# Second Section
+
+This content starts on a new page.

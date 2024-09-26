@@ -1,0 +1,43 @@
+user:
+
+how is this abstract: 
+
+abstract: "This report looks at the ferry services to the Toronto Islands, a significant recreational destination accessible exclusively by water. We analyze a data set of Ferry Ticket Counts from May 2018 to September 2024 in order to find patterns and trends in ferry usage and the effects of external factors. Using time series analysis and data visualization, the data shows that there exist definitive seasonal trends, with sharp declines during the pandemic period. Our findings suggest that ferry usage is highly seasonal and very vulnerable to external shocks. The paper concludes by discussing broader implications for tourism, urban and contingency planning, and public transportation management."
+
+marked according to this rubric: 
+
+This criterion is linked to a Learning OutcomeAbstract
+An abstract is included and appropriately pitched to a non-specialist audience. The abstract answers: 1) what was done, 2) what was found, and 3) why this matters (all at a high level). Likely four sentences. Abstract must make clear what we learn about the world because of this paper.
+4 pts
+Exceptional
+3 pts
+Great
+2 pts
+Fine
+1 pts
+Gets job done
+0 pts
+Poor or not done
+4 pts
+
+
+ChatGPT said:
+ChatGPT
+Your abstract is clear and informative, but a few adjustments can make it even stronger and more aligned with the rubric. Here’s a breakdown according to the rubric:
+
+What was done: You mention that the report analyzes ferry ticket counts from May 2018 to September 2024 using time series analysis and data visualization, which is clear.
+
+What was found: You state that seasonal trends were observed, with sharp declines during the pandemic, which addresses the findings.
+
+Why this matters: You touch on the implications for tourism, urban planning, and transportation management, which answers why the findings are important.
+
+Suggestions for improvement:
+Clarity for non-specialists: You could simplify phrases like "time series analysis" to make it more accessible to non-specialists. Instead, you might say something like "we studied changes over time."
+Conciseness: While it’s within four sentences, tightening the language slightly might make the abstract more impactful.
+Highlighting what we learn: The line about broader implications is good, but you could emphasize more directly what this teaches us about ferry services and urban planning.
+Revised abstract suggestion:
+"This report examines ferry services to the Toronto Islands, a key recreational area accessible only by water. We analyzed ferry ticket data from May 2018 to September 2024 to uncover patterns in usage and the impact of external factors like the COVID-19 pandemic. The results show clear seasonal patterns, with significant declines in ferry use during the pandemic. Our findings underscore how sensitive ferry services are to seasonal changes and unexpected disruptions, with implications for tourism, urban planning, and public transportation management."
+
+This version ensures clarity, reduces jargon, and emphasizes what we learn about the world because of the paper.
+
+Based on the rubric, this would likely receive a score of 4 points (Exceptional) because it effectively communicates what was done, what was found, and why it matters, while being appropriately pitched to a non-specialist audience.

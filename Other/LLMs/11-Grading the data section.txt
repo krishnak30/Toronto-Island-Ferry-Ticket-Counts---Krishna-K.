@@ -1,0 +1,180 @@
+user: 
+
+now how would you grade this data section:
+
+Data
+
+Overview
+
+The data used in this paper is derived from Open Data Toronto and is read into this paper using the library 'opendatatoronto' [@opendatatoronto]. The data were cleaned and analyzed using the statistical programming language 'R' [@R]. Simulating, cleaning, and testing the data was done with the help of the following packages: 'tidyverse' [@tidyverse], 'janitor' [@janitor], 'knitr' [@knitr], 'kableExtra' [@kableExtra], 'dplyr' [@dplyr], 'readr' [@readr], 'here' [@here], and 'lubridate' [@lubridate]. The graphs and plots were made using 'ggplot2' [@ggplot2].
+
+The data is published by Parks, Forestry, and Recreation and is updated on an hourly basis, providing real-time data and updates. The data provides information regarding the ferries that take visitors to Toronto Islands Park, which is considered a popular summer spot for tourists and locals alike. These ferries carry passengers to and from Centre Island, Hanlan's Point, and Ward's Island. The raw data features the counts for the total number of tickets redeemed and tickets sold in particular time periods. The time stamps are shown in 15-minute intervals and contain the data for redemptions and sales in the past 15 minutes. The time period for the data set ranges from the 1st of January, 2018 to the 20th of September, 2024, and contains around 229,000 rows/data entries.
+
+Hence, the chosen variables for the data were ID (a unique identifier for each entry), date and time stamps, number of tickets redeemed for ferry access, and the number of tickets purchased. The timestamp column was broken down into two new 'Date of transaction' and 'Time of transaction' columns for better and deeper analysis.
+
+The variable 'Number of Redemption Tickets' accounted for the number of people who redeemed their tickets to use the ferry to reach the Toronto Islands. The variable 'Number of Sales Tickets' accounted for the number of people who purchased tickets from in-person POS-Kiosks or online platforms, and encompassed all product types.
+
+A sample of the cleaned data set can be found in [@tbl-datapreviewtable], showcasing the variables and the structure of the data.
+
+{r}
+#| label: tbl-datapreviewtable
+#| tbl-cap: "Sample of cleaned Ferry Ticket Counts Data"
+#| warning: false
+#| echo: false
+#| message: false
+
+data_preview <- head(cleaned_ticket_counts_data, 10)
+ 
+kable(data_preview,
+      col.names = c("ID", "Time", "Tickets Redeemed", "Tickets Sold", "Date"), 
+    digits = 1,
+    booktabs = TRUE,
+    linesep = "", 
+    align = c("c", "c", "c", "c", "c")
+  )
+
+
+Data Cleaning
+
+The data cleaning process involved breaking down the 'timestamp' column into two 'Date' and 'Time' columns for a better and more clear analysis. Along with changing names of the columns, deleting duplicate columns, and removing entries from the data that served as outliers. The data was filtered to only analyse data from 2018 to 2024, removing years 2015 - 2018. This was because the data set was too large to analyse altogether efficiently and the new filtered data set allowed for a closer analysis of the impact of COVID-19.
+
+Broader Context
+
+This data was the only of its kind on the Open Data Toronto library, providing the numbers for the ticket counts of ferry use for the Toronto Islands. This data was chosen due to the broader context and the potential for discussion. This data set is essential in understanding the urban mobility and recreational trends in Toronto.
+
+Firstly, as Toronto Islands Park is a major recreational area, it affects millions of visitors annually. The ferry contributes to the local economy through tourism-related spending. Understanding these patterns can help us gain insights into seasonal fluctuations in tourism and help local businesses (close to Toronto Islands) optimize their offerings. For example, increased ferry usage during the summer may correlate with higher foot traffic for restaurants and vendors on the islands. Secondly, while private water taxis are available to get to the islands, a large majority prefer to use the ferry due to the relatively lower price point and the fact that the ticket is free on the way back. By analyzing redemption and sales tickets, city planners and transportation officials can better understand the demand patterns, which can help them schedule service improvements. Lastly, analyzing ticket counts and patterns of increased usage can be important when designing public safety protocols. By understanding the usage patterns, officials are able to have tailored contingency plans. For example, in the event of a fire on the islands and when evacuation is needed, less support might be required in the winter season compared to the summer.
+
+Basic Summary Statistics
+
+The summary statistics are provided in [@tbl-summary] and allow us to get an understanding of the data in a very comprehensible manner. The high volume of tickets sold and redeemed indicates a healthy and significant demand for the ferry and the closeness of the values conveys strong customer engagement and reliable service. On average, 46.92 tickets were sold every 15 minutes during working hours, and 47.37 tickets were redeemed, indicating that most customers utilized their tickets. However, the small gap implies some no-shows or unused tickets. The maximum number of redemption and sales tickets (7,216 and 7,229) showcases the ferry's ability to handle high customer volumes and the closeness of these values tells us that, on busy days, the ferry usually operates at capacity.
+
+Moreover, the relationships between the variables allow us to understand more about the patterns and usage. The high correlation between the number of tickets redeemed and sold (~ 98% of sold tickets were redeemed!) suggests that customer satisfaction is high and that the ferry is able to meet demands. The averages and the maximum numbers show us that there is a high correlation between the number of tickets sold and redeemed, suggesting good operational viability. Lastly, the minimum values of 0 for both types of tickets suggest that there are periods of little-to-no demand, which typically occur during off-peak hours and off-seasons (which we will analyze soon).
+
+\newpage
+
+{r}
+#| label: tbl-summary
+#| tbl-cap: "Summary Statistics of Ticket Counts"
+#| warning: false
+#| echo: false
+#| message: false
+
+
+summary_table <- cleaned_ticket_counts_data %>%
+    summarize(
+        'Avg Redeemed' = mean(Tickets_Redeemed, na.rm = TRUE),
+        'Avg Sold' = mean(Tickets_Sold, na.rm = TRUE),
+        'Max Redeemed' = max(Tickets_Redeemed, na.rm = TRUE),
+        'Max Sold' = max(Tickets_Sold, na.rm = TRUE),
+        Count = n()
+    )
+
+# Print the summary table 
+kable(summary_table, format = "latex", booktabs = TRUE) %>%
+  kable_styling(full_width = FALSE, position = "center", (latex_options = c("hold_position", "repeat_header"))) %>%  
+  column_spec(1:5, width = "2cm")
+
+
+Ferry Ticket Counts Over Time
+
+After studying the summary statistics, we have an idea of the capacity and performance of the ferry, along with the relationships between the variables. Next, with the use of[@fig-timeseriesanalysis], we can study the patterns of ticket counts from 2018 to 2024. In figure 1, we can see that there is a definitive pattern in the usage numbers when looking at each year. We see that there are spikes during the mid-year months for each year, indicating higher popularity of the Toronto Islands during those times and suggesting that the islands serve as a significant recreational destination.
+
+We can also see that for every year, there is a slow climb from the beginning of the year (which starts very low) indicating an off-season and the start of the tourist season. Conversely, there is a gradual decline during the end of the year (also indicating an off-season) which confirms a seasonal drop in demand as the cold weather deters visitors. The highs in each year are steady at 800 - 1000 for the number of tickets sold in one interval, however, the highs for the number of tickets redeemed are usually lower, but ever-fluctuating. This fluctuation and discrepancy could indicate that not all passengers redeem their tickets within the same time frame or that there are differences in purchasing behavior.
+
+Notably, [@fig-timeseriesanalysis] also shows an anomaly during the years 2020 and 2021, conveyed by highly depressed sales and redemption ticket counts. This can be attributed to the COVID-19 pandemic, which led to widespread public facility closures and reduced operational capacities. The peak ticket count in 2020, reaching only about 200, is in high contrast with every other year, highlighting the pandemic's massive impact on public transportation and tourism.
+
+{r}
+#| label: fig-timeseriesanalysis
+#| fig-cap: "Tickets Sold and Redeemed per 15 min Interval"
+#| warning: false
+#| echo: false
+#| message: false
+#| fig-align: center
+
+
+library(ggplot2)
+
+# Reshape data to long format
+long_ticket_data <- cleaned_ticket_counts_data %>%
+  select(Date, Tickets_Sold, Tickets_Redeemed) %>%
+  pivot_longer(cols = c(Tickets_Sold, Tickets_Redeemed),
+               names_to = "Ticket_Type",
+               values_to = "Count")
+
+# Histogram for Tickets Sold and Redeemed
+ggplot(long_ticket_data, aes(x = Date, y = Count, fill = Ticket_Type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+       x = "Date",
+       y = "Total Count") +
+  scale_fill_manual(values = c("Tickets_Sold" = "blue", "Tickets_Redeemed" = "orange"), 
+                    labels = c("Tickets Sold", "Tickets Redeemed")) +
+  ylim(0, 1250) +
+  theme_minimal() + 
+  theme(axis.title.x = element_text(margin = margin(t = 10)), 
+        axis.title.y = element_text(margin = margin(r = 10)))
+
+
+\newpage
+
+Month-by-Month Analysis
+
+To build on our understanding of overall ticket trends observed in the previous section, it is essential to analyze the month-by-month usage to better understand usage patterns in each year. These patterns may not be visible in the previous section due to the large time range of the data.
+
+[@fig-monthanalysis] shows a monthly analysis of redemption and sales ticket counts for each year. The data in this figure has been grouped together and summed. i.e. the ticket counts for each of the 12 months in every year from 2018 to 2024 have been summed and aggregated so that we can see the monthly trends over the past 6 years.
+
+The graph shows distinct peaks in ticket sales and redemption during the summer months (June to August), aligning with the typical tourist season and confirming the ferry's role in providing transportation to the islands. In addition to the tourist season, individuals might prefer to go to the islands in these months due to the beach activities and the availability of restaurants and vendors. Conversely, the months of October through April show noticeably lower ticket counts, consistent with weather conditions in Toronto where temperatures often drop below zero degrees Celsius. Hence, deterring visitors from the islands.
+
+Interestingly, every month shows a close correlation between the sales and redemption tickets and what implications this has for the ferry service. The values for sales and redemption ticket counts are extremely close together for all months as displayed in @fig-monthanalysis.
+
+according to this rubric:
+
+This criterion is linked to a Learning OutcomeData
+A sense of the dataset should be communicated to the reader. The broader context of the dataset should be discussed. All variables should be thoroughly examined and explained. Explain if there were similar datasets that could have been used and why they were not. If variables were constructed then this should be mentioned, and high-level cleaning aspects of note should be mentioned, but this section should focus on the destination, not the journey. It is important to understand what the variables look like by including graphs, and possibly tables, of all observations, along with discussion of those graphs and the other features of these data. Summary statistics should also be included, and well as any relationships between the variables. If this becomes too detailed, then appendices could be used.
+10 pts
+Exceptional
+8 pts
+Great
+6 pts
+Good
+4 pts
+Some issues
+2 pts
+Many issues
+0 pts
+Poor or not done
+10 pts
+
+ignore the code
+
+
+ChatGPT said:
+ChatGPT
+Here’s a grading evaluation for the "Data" section based on the provided rubric:
+
+Grading Evaluation
+1. Communication of Dataset Context (3/3 points)
+
+The section provides a clear overview of the dataset, including its source (Open Data Toronto) and the purpose (ferry ticket counts for Toronto Islands).
+The broader context is well articulated, emphasizing the significance of the dataset in understanding urban mobility and recreational trends in Toronto.
+2. Examination and Explanation of Variables (3/3 points)
+
+The section thoroughly explains the variables, including IDs, timestamps, tickets redeemed, and tickets sold.
+The transformation of the timestamp into separate date and time columns is clearly noted, along with the implications of these changes for analysis.
+3. Discussion of Similar Datasets (1/2 points)
+
+While the dataset is described as unique within the Open Data Toronto library, there is no mention of any other datasets that could have been utilized or why this specific dataset was chosen over others. A brief discussion of potential alternatives could strengthen this section.
+4. Inclusion of Summary Statistics and Relationships (3/3 points)
+
+The summary statistics are effectively presented, providing insights into ticket sales and redemption patterns.
+Relationships between variables are discussed, particularly the high correlation between tickets sold and redeemed, contributing to the understanding of customer behavior.
+5. Use of Graphs and Tables (3/3 points)
+
+The section references relevant tables and figures (e.g., cleaned data sample, summary statistics, time series analysis) that enhance understanding.
+The discussion around these visual aids is insightful, correlating trends with contextual information (seasonal fluctuations, COVID-19 impact).
+Overall Grade: 13/14 points (Great)
+
+Comments:
+The "Data" section is well-structured and effectively communicates the significance of the dataset. The clarity in explaining variables, summary statistics, and visual aids contributes to a comprehensive understanding of the data.
+To enhance the section further, consider discussing similar datasets or alternatives and why this dataset was favored. This would provide a more rounded justification for the dataset choice.
+Overall, this is an impressive and thorough section that meets the majority of the rubric criteria effectively.

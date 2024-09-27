@@ -2,7 +2,7 @@
 title: "Summer Peaks and Winter Lows: An Analysis of Toronto Island Ferry Ticket Counts"
 subtitle: "What Six Years of Data Reveal About Ferry Usage, Visitor Patterns, and Seasonal Consumer Behaviour"
 author: Krishna Kumar
-thanks: "Code and data are available at: https://github.com/krishnak30/Toronto-Island-Ferry-Ticket-Counts-Krishna-K.git."
+thanks: "Code and data are available at: https://github.com/krishnak30/Toronto_Islands_Ferry_Ticket_Counts.git"
 date: today
 date-format: long
 abstract: "This report examines ferry services to the Toronto Islands, a key recreational area accessible only by water. We analyzed ferry ticket data from May 2018 to September 2024 to uncover patterns in usage, visitor trends, and the impact of external factors like the COVID-19 pandemic. The results show clear seasonal patterns, with significant/unprecedented declines in ferry usage during the pandemic. Our findings emphasize how sensitive ferry services are to seasonal changes and unexpected disruptions, with broader implications for tourism, local economies, urban planning, and the resilience of public transportation systems in response to external shocks."
